@@ -1,3 +1,4 @@
+// DOM Elements
 const menuIcon = document.querySelector('#menu-icon');
 const navbar = document.querySelector('.navbar');
 const header = document.querySelector('header');
@@ -8,7 +9,8 @@ const typingTextElement = document.querySelector('.typing-text');
 const skillBars = document.querySelectorAll('.bar span');
 const contactForm = document.querySelector('#contact-form');
 
-const texts = ['ML Student', 'Data Scientist', 'Web Developer', 'Python Developer'];
+// Typing text animation
+const texts = ['ML Engineer', 'Data Scientist', 'AI Researcher', 'Python Developer'];
 let textIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
@@ -20,6 +22,7 @@ function typeText() {
     const currentText = texts[textIndex];
     
     if (isDeleting) {
+        // Remove a character
         typingTextElement.textContent = currentText.substring(0, charIndex - 1);
         charIndex--;
         typingDelay = erasingDelay;
@@ -45,13 +48,16 @@ function typeText() {
     setTimeout(typeText, typingDelay);
 }
 
+// Initialize typing animation after a brief delay
 setTimeout(typeText, 1000);
 
+// Toggle menu icon for mobile view
 menuIcon.addEventListener('click', () => {
     menuIcon.classList.toggle('bx-x');
     navbar.classList.toggle('active');
 });
 
+// Toggle theme (dark/light mode)
 themeIcon.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
     
@@ -62,12 +68,16 @@ themeIcon.addEventListener('click', () => {
     }
 });
 
+// Sticky header and active navigation links
 window.addEventListener('scroll', () => {
+    // Add sticky class to header when scrolling
     header.classList.toggle('sticky', window.scrollY > 100);
     
+    // Remove toggle icon and navbar when clicking navbar links on mobile view
     menuIcon.classList.remove('bx-x');
     navbar.classList.remove('active');
     
+    // Activate corresponding nav link based on scroll position
     sections.forEach(section => {
         const sectionTop = section.offsetTop - 100;
         const sectionHeight = section.offsetHeight;
@@ -81,6 +91,7 @@ window.addEventListener('scroll', () => {
                 }
             });
             
+            // Animate skill bars when in resume section
             if (id === 'resume') {
                 animateSkillBars();
             }
@@ -88,6 +99,7 @@ window.addEventListener('scroll', () => {
     });
 });
 
+// Animate skill bars
 function animateSkillBars() {
     skillBars.forEach(bar => {
         const width = bar.parentElement.previousElementSibling.querySelector('span').textContent;
@@ -95,6 +107,7 @@ function animateSkillBars() {
     });
 }
 
+// Scroll reveal animation
 const scrollReveal = () => {
     const revealElements = document.querySelectorAll('.services-box, .resume-content, .portfolio-box, .contact-card');
     
@@ -110,6 +123,7 @@ const scrollReveal = () => {
     });
 };
 
+// Add CSS class for scroll reveal animations
 document.head.insertAdjacentHTML('beforeend', `
     <style>
         .services-box, .resume-content, .portfolio-box, .contact-card {
@@ -125,19 +139,40 @@ document.head.insertAdjacentHTML('beforeend', `
     </style>
 `);
 
+// Contact form submission with EmailJS
 contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const name = document.querySelector('#name').value;
-    const email = document.querySelector('#email').value;
-    const subject = document.querySelector('#subject').value;
-    const message = document.querySelector('#message').value;
-    
-    alert(`Thank you ${name} for your message! I'll get back to you soon.`);
-    
-    contactForm.reset();
+    const templateParams = {
+        from_name: document.querySelector('#name').value,
+        from_email: document.querySelector('#email').value,
+        subject: document.querySelector('#subject').value,
+        message: document.querySelector('#message').value,
+        to_name: 'Sadam Husen'
+    };
+
+    // Show loading state
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+
+    emailjs.send('service_ivc90r4', 'template_038elzt', templateParams)
+        .then(() => {
+            alert('Message sent successfully!');
+            contactForm.reset();
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Failed to send message. Please try again.');
+        })
+        .finally(() => {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        });
 });
 
+// Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -155,7 +190,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Initialize scroll reveal and skill bar animations on load
 window.addEventListener('load', () => {
+    // Initial check for active section
     sections.forEach(section => {
         const sectionTop = section.offsetTop - 100;
         const sectionHeight = section.offsetHeight;
@@ -174,5 +211,5 @@ window.addEventListener('load', () => {
     scrollReveal();
 });
 
-// Adding scroll event for reveal animations
+// Add scroll event for reveal animations
 window.addEventListener('scroll', scrollReveal);
