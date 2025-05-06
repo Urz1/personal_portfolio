@@ -10,7 +10,7 @@ const skillBars = document.querySelectorAll('.bar span');
 const contactForm = document.querySelector('#contact-form');
 
 // Typing text animation
-const texts = ['ML Engineer', 'Data Scientist', 'AI Researcher', 'Python Developer'];
+const texts = ['CS Student', 'ML Enthusiast', 'Data Scientist', 'Web Developer', 'Python Developer'];
 let textIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
